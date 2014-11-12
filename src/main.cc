@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include "PentadraPair.h"
 #include <cmath>
+#include <iostream>
 
 // Function Prototypes
 
@@ -105,6 +106,7 @@ void init()
 //***************************************************************
 void display()
 {
+	PentadraPair newPentadraTest(0, 0, 0);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -125,10 +127,8 @@ void display()
 	
 	double newPoint[] = {VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2]};
 	//gluLookAt(1.5, 1.5, 1.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt(newPoint[0], newPoint[1], newPoint[2], 0, 0, 0, VUP[0], VUP[1], VUP[2]);
+	gluLookAt(VRP[0], VRP[1], VRP[2], VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VUP[0], VUP[1], VUP[2]);
 	//gluLookAt(VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VRP[0], VRP[1], VRP[2], VUP[0], VUP[1], VUP[2]);
-	
-	PentadraPair newPentadraTest(0, 0);
 	
 	// Push matrix on to the stack
 	glPushMatrix();
@@ -153,10 +153,13 @@ void display()
 //***************************************************************
 void action()
 {
-	spin = spin + 0.10;
+	if (isRotating)
+	{
+		spin = spin + 0.10;
 	
-	if (spin > 360.0)
-		spin = spin - 360;
+		if (spin > 360.0)
+			spin = spin - 360;
+	}
 	
 	glutPostRedisplay();
 }
@@ -210,19 +213,22 @@ void keyboard(unsigned char key, int xPos, int yPos)
 			changeAxisRotation(0.0, 0.0, 1.0);
 			break;
 		case 32:
-			VRP[0] = VRP[0] - VPN[0];
-			VRP[1] = VRP[1] - VRP[1];
-			VRP[2] = VRP[2] - VRP[2];
+			VRP[0] = VRP[0] + VPN[0];
+			VRP[1] = VRP[1] + VPN[1];
+			VRP[2] = VRP[2] + VPN[2];
+			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 66:
-			VRP[0] = VRP[0] + VPN[0];
-			VRP[1] = VRP[1] + VRP[1];
-			VRP[2] = VRP[2] + VRP[2];
+			VRP[0] = VRP[0] - VPN[0];
+			VRP[1] = VRP[1] - VPN[1];
+			VRP[2] = VRP[2] - VPN[2];
+			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 98:
-			VRP[0] = VRP[0] + VPN[0];
-			VRP[1] = VRP[1] + VRP[1];
-			VRP[2] = VRP[2] + VRP[2];
+			VRP[0] = VRP[0] - VPN[0];
+			VRP[1] = VRP[1] - VPN[1];
+			VRP[2] = VRP[2] - VPN[2];
+			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 78:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10);
@@ -244,6 +250,10 @@ void keyboard(unsigned char key, int xPos, int yPos)
 
 void processSpecialKeys(int key, int xx, int yy)
 {
+	double crossVupVpn[3];
+	crossVupVpn[0] = computeCrossProduct(VUP, VPN)[0];
+	crossVupVpn[1] = computeCrossProduct(VUP, VPN)[1];
+	crossVupVpn[2] = computeCrossProduct(VUP, VPN)[2];
 	switch (key)
 	{
 		case GLUT_KEY_LEFT:
@@ -254,12 +264,12 @@ void processSpecialKeys(int key, int xx, int yy)
 			break;
 			break;
 		case GLUT_KEY_UP:
-			rotateAboutArbitraryAxis(VUP, computeCrossProduct(VUP, VPN)[0], computeCrossProduct(VUP, VPN)[1], computeCrossProduct(VUP, VPN)[2], PI/10);
-			rotateAboutArbitraryAxis(VPN, computeCrossProduct(VUP, VPN)[0], computeCrossProduct(VUP, VPN)[1], computeCrossProduct(VUP, VPN)[2], PI/10);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10 * -1);
 			break;
 		case GLUT_KEY_DOWN:
-			rotateAboutArbitraryAxis(VUP, computeCrossProduct(VUP, VPN)[0], computeCrossProduct(VUP, VPN)[1], computeCrossProduct(VUP, VPN)[2], PI/10 * -1);
-			rotateAboutArbitraryAxis(VPN, computeCrossProduct(VUP, VPN)[0], computeCrossProduct(VUP, VPN)[1], computeCrossProduct(VUP, VPN)[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10);
 			break;
 		default:
 			break;
@@ -306,7 +316,7 @@ void reshape(int width, int height)
 	 * sets the eye to be at (1.5, 1.5, 1.5) looking at the origin etc.
 	*/
 	//gluLookAt(1.5, 1.5, 1.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	gluLookAt(VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VPN[0], VPN[1], VPN[2], VUP[0], VUP[1], VUP[2]);
+	gluLookAt(VRP[0], VRP[1], VRP[2], VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VUP[0], VUP[1], VUP[2]);
 	//gluLookAt(VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VRP[0], VRP[1], VRP[2], VUP[0], VUP[1], VUP[2]);
 	
 	screenWidth = width;
@@ -323,15 +333,9 @@ void reshape(int width, int height)
 void rotationHelperFunc()
 {
 	if (isRotating)
-	{
-		glutIdleFunc(NULL);
 		isRotating = false;
-	}
 	else
-	{
-		glutIdleFunc(action);
 		isRotating = true;
-	}
 }
 
 //***************************************************************
@@ -350,7 +354,7 @@ double* computeCrossProduct (double vector1[3], double vector2[3])
 	double crossProductVector[3];
 	
 	crossProductVector[0] = vector1[1]*vector2[2] - vector1[2]*vector2[1];
-	crossProductVector[1] = vector1[2]*vector2[0] - vector1[0]*vector2[2];
+	crossProductVector[1] = (vector1[2]*vector2[0] - vector1[0]*vector2[2]) * -1;
 	crossProductVector[2] = vector1[0]*vector2[1] - vector1[1]*vector2[0];
 	
 	return crossProductVector;

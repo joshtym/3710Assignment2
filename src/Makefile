@@ -5,7 +5,7 @@ OBJDIR = ../obj/
 LNFLAGS = -lGL -lGLU -lGLEW -lglut -lm -Wno-write-strings
 OBJECTS = main.o PentadraPair.o
 OBJS = $(addprefix $(OBJDIR), $(OBJECTS))
-EXECUTALBE = ../bin/a1
+EXECUTALBE = ../bin/a2
 
 $(EXECUTALBE): $(OBJS)
 	g++ $(LIBDIR) -o $@ $^ $(LNFLAGS)

@@ -18,12 +18,19 @@ PentadraPair::PentadraPair()
 	
 }
 
-PentadraPair::PentadraPair(double xyAlteration, double zAlteration)
+PentadraPair::PentadraPair(double xAlteration, double yAlteration, double zAlteration)
 {
+	double xValues[] = {0, 0, 0.5, 0.75, 0.5, 0.25, 0, 0, 0.25, 0.5, 0, 0.25, 0.5, 0.75, 0.5, 0.5, 0, 0.75};
+	double yValues[] = {0, 0, 0, 0, 0.5, 0.25, 0, 0, 0.25, 0, 0, 0.25, 0.5, 0, 0, 0.5, 0, 0};
+	double zValues[] = {0, -1, -1, -0.75, -0.5, -1, -1, 0, -1, -1, -1, -1, -0.5, -0.75, -1, -0.5, 0, -0.75};
+	
+	double colourOne[] = {1, 0, 0};
+	double colourTwo[] = {0, 1, 0};
+	
 	for (int i = 0; i < 18; i++)
 	{
-		xValues[i] = xValues[i] + cos(xyAlteration * PI / 180);
-		yValues[i] = yValues[i] + sin(xyAlteration * PI / 180);
+		xValues[i] = xValues[i] + xAlteration;
+		yValues[i] = yValues[i] + yAlteration;
 		zValues[i] = zValues[i] + zAlteration;
 	}
 	
@@ -167,7 +174,8 @@ double PentadraPair::getOriginZValue()
 
 void PentadraPair::rotatePoints(double theta, GLfloat xAxis, GLfloat yAxis, GLfloat zAxis)
 {
-	//glTranslatef(getOriginXValue(), getOriginYValue(), getOriginZValue());
+	//glLoadIdentity();
+	glTranslatef(getOriginXValue(), getOriginYValue(), getOriginZValue());
 	glRotatef(theta, xAxis, yAxis, zAxis);
-	//glTranslatef(getOriginXValue() * -1, getOriginYValue() * -1, getOriginZValue() * -1);
+	glTranslatef(getOriginXValue() * -1, getOriginYValue() * -1, getOriginZValue() * -1);
 }

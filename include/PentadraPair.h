@@ -7,7 +7,7 @@ class PentadraPair
 {
 	public:
 		PentadraPair();
-		PentadraPair(double, double);
+		PentadraPair(double, double, double);
 		~PentadraPair();
 		void drawPentadraPair();
 		double getOriginXValue();
