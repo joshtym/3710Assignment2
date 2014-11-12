@@ -50,6 +50,7 @@ static GLfloat zAxisRotation = 0.0;
 static double VPN[3];
 static double VUP[3];
 static double VRP[3];
+static PentadraPair newPentadraTest(1, 1, 1);
 
 int main(int argc, char **argv)
 {
@@ -106,7 +107,7 @@ void init()
 //***************************************************************
 void display()
 {
-	PentadraPair newPentadraTest(0, 0, 0);
+	//PentadraPair pentadraTest2(0,0,0);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -135,10 +136,12 @@ void display()
 	
 	// Rotate object dependent on spin angle and axis vlaues
 	newPentadraTest.rotatePoints(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	//pentadraTest2.rotatePoints(spin, xAxisRotation, yAxisRotation, zAxisRotation);
 	
 	// Begin drawing the Pentadra
 	 
 	newPentadraTest.drawPentadraPair();
+	//pentadraTest2.drawPentadraPair();
 	
 	// Pop the matrix off the stack, swap the two buffers and flush
 	// it out of the OpenGL pipe
@@ -216,19 +219,16 @@ void keyboard(unsigned char key, int xPos, int yPos)
 			VRP[0] = VRP[0] + VPN[0];
 			VRP[1] = VRP[1] + VPN[1];
 			VRP[2] = VRP[2] + VPN[2];
-			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 66:
 			VRP[0] = VRP[0] - VPN[0];
 			VRP[1] = VRP[1] - VPN[1];
 			VRP[2] = VRP[2] - VPN[2];
-			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 98:
 			VRP[0] = VRP[0] - VPN[0];
 			VRP[1] = VRP[1] - VPN[1];
 			VRP[2] = VRP[2] - VPN[2];
-			std::cout << "VRP: " << VRP[0] << " " << VRP[1] << " " << VRP[2] << std::endl;
 			break;
 		case 78:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10);
