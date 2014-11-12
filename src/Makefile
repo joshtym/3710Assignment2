@@ -3,14 +3,14 @@ LIBDIR = -L /usr/lib
 INCLUDEDIRS = -I ../include/
 OBJDIR = ../obj/
 LNFLAGS = -lGL -lGLU -lGLEW -lglut -lm -Wno-write-strings
-OBJECTS = main.o
+OBJECTS = main.o PentadraPair.o
 OBJS = $(addprefix $(OBJDIR), $(OBJECTS))
 EXECUTALBE = ../bin/a1
 
 $(EXECUTALBE): $(OBJS)
 	g++ $(LIBDIR) -o $@ $^ $(LNFLAGS)
 	
-$(OBJDIR)%.o : %.cpp
+$(OBJDIR)%.o : %.cc
 	g++ -c -o $@ $< $(CCFLAGS)
 
 clean:
