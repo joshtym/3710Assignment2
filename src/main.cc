@@ -56,16 +56,16 @@ static double VUP[3];
 static double VRP[3];
 
 // Global object
-static PentadraPair pentadra1(cos(0), sin(0), -10);
-static PentadraPair pentadra2(cos(PI/3), sin(PI/3), -7);
-static PentadraPair pentadra3(cos(2*PI/3), sin(2*PI/3), -4);
-static PentadraPair pentadra4(cos(PI), sin(PI), -1);
-static PentadraPair pentadra5(cos(4*PI/3), sin(4*PI/3), 2);
-static PentadraPair pentadra6(cos(5*PI/3), sin(5*PI/3), 5);
-static PentadraPair pentadra7(cos(0), sin(0), 8);
-static PentadraPair pentadra8(cos(PI/3), sin(PI/3), 11);
-static PentadraPair pentadra9(cos(2*PI/3), sin(2*PI/3), 14);
-static PentadraPair pentadra10(cos(PI), sin(PI), 17);
+static PentadraPair pentadra1;
+static PentadraPair pentadra2;
+static PentadraPair pentadra3;
+static PentadraPair pentadra4;
+static PentadraPair pentadra5;
+static PentadraPair pentadra6;
+static PentadraPair pentadra7;
+static PentadraPair pentadra8;
+static PentadraPair pentadra9;
+static PentadraPair pentadra10;
 
 int main(int argc, char **argv)
 {
@@ -116,6 +116,18 @@ void init()
 	VUP[0] = 0;
 	VUP[1] = 1;
 	VUP[2] = 0;
+	
+	// Assign initial origin values to Pentadras
+	pentadra1.assignOriginValues(cos(0), sin(0), -10);
+	pentadra2.assignOriginValues(cos(PI/3), sin(PI/3), -7);
+	pentadra3.assignOriginValues(cos(2*PI/3), sin(2*PI/3), -4);
+	pentadra4.assignOriginValues(cos(PI), sin(PI), -1);
+	pentadra5.assignOriginValues(cos(4*PI/3), sin(4*PI/3), 2);
+	pentadra6.assignOriginValues(cos(5*PI/3), sin(5*PI/3), 5);
+	pentadra7.assignOriginValues(cos(0), sin(0), 8);
+	pentadra8.assignOriginValues(cos(PI/3), sin(PI/3), 11);
+	pentadra9.assignOriginValues(cos(2*PI/3), sin(2*PI/3), 14);
+	pentadra10.assignOriginValues(cos(PI), sin(PI), 17);
 }
 
 //***************************************************************
@@ -241,19 +253,19 @@ void keyboard(unsigned char key, int xPos, int yPos)
 			break;
 		// 'N' key
 		case 78:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/20);
 			break;
 		// 'n' key
 		case 110:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/20);
 			break;
 		// 'M' key
 		case 77:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/20 * -1);
 			break;
 		// 'm' key
 		case 109:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/20 * -1);
 			break;
 		default:
 			break;
@@ -279,19 +291,19 @@ void processSpecialKeys(int key, int xx, int yy)
 	switch (key)
 	{
 		case GLUT_KEY_LEFT:
-			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/15);
+			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/20);
 			break;
 		case GLUT_KEY_RIGHT:
-			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/15 * -1);
+			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/20 * -1);
 			break;
 			break;
 		case GLUT_KEY_UP:
-			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15 * -1);
-			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15 * -1);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/20 * -1);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/20 * -1);
 			break;
 		case GLUT_KEY_DOWN:
-			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15);
-			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/20);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/20);
 			break;
 		default:
 			break;

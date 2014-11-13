@@ -1,4 +1,4 @@
-CPSC 3710 Assignment 1
+CPSC 3710 Assignment 2
 ==============================================
 
 Dependencies
@@ -19,8 +19,9 @@ to make a working version on other platforms
 
 Description
 ---------------------------------------------
-Simple little shape rotational animation that utilizes OpenGL's library
-to create a rotating three dimensional Pentadra. 
+Simple little 'flight simulator' (For lack of a better term) that utilizes OpenGL's library
+to create multiple rotating three dimensional Pentadras. The user uses keys to 'move' around
+within the world. The keys are listed below
 
 Controls
 ------------------------------------------------
@@ -30,6 +31,14 @@ Simple controls are as follows
 - x -- Makes object rotate about the x axis
 - y -- Makes object rotate about the y axis
 - z -- Makes object rotate about the z axis
+- n -- Rolls the screen / camera left
+- m -- Rolls the screen / camera right
+- space -- Moves the user forward in the world
+- b -- Moves the user backwards in the world
+- CursorUp -- Moves the camera's pitch upwards
+- CursorDown -- Moves the camera's pitch downwards
+- CursorLeft -- Moves the camera's yaw to the left
+-- CursorRight -- Moves the camera's yaw to the right
 - ESC -- Closes program
 
 Execute
