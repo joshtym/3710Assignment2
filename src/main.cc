@@ -50,13 +50,24 @@ static GLfloat zAxisRotation = 0.0;
 static double VPN[3];
 static double VUP[3];
 static double VRP[3];
-static PentadraPair newPentadraTest(1, 1, 1);
+static PentadraPair pentadra1(cos(0), sin(0), -10);
+static PentadraPair pentadra2(cos(PI/3), sin(PI/3), -7);
+static PentadraPair pentadra3(cos(2*PI/3), sin(2*PI/3), -4);
+static PentadraPair pentadra4(cos(PI), sin(PI), -1);
+static PentadraPair pentadra5(cos(4*PI/3), sin(4*PI/3), 2);
+static PentadraPair pentadra6(cos(5*PI/3), sin(5*PI/3), 5);
+static PentadraPair pentadra7(cos(0), sin(0), 8);
+static PentadraPair pentadra8(cos(PI/3), sin(PI/3), 11);
+static PentadraPair pentadra9(cos(2*PI/3), sin(2*PI/3), 14);
+static PentadraPair pentadra10(cos(PI), sin(PI), 17);
 
 int main(int argc, char **argv)
 {
 	/* Supplied -- Do not change! */
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(argv[0]);
@@ -84,7 +95,7 @@ int main(int argc, char **argv)
 void init()
 {
 	// Clear the colour to black and set appropiate ShadeModeling
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glShadeModel(GL_SMOOTH);
 	
 	VRP[0] = 0;
@@ -107,8 +118,6 @@ void init()
 //***************************************************************
 void display()
 {
-	//PentadraPair pentadraTest2(0,0,0);
-	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	/* set the viewing area -- use perspective projection
@@ -125,27 +134,19 @@ void display()
 	/* Viewing Transformation
 	 * sets the eye to be at (1.5, 1.5, 1.5) looking at the origin etc.
 	*/
-	
-	double newPoint[] = {VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2]};
-	//gluLookAt(1.5, 1.5, 1.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 	gluLookAt(VRP[0], VRP[1], VRP[2], VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VUP[0], VUP[1], VUP[2]);
-	//gluLookAt(VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VRP[0], VRP[1], VRP[2], VUP[0], VUP[1], VUP[2]);
 	
-	// Push matrix on to the stack
-	glPushMatrix();
+	pentadra1.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra2.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra3.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra4.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra5.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra6.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra7.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra8.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra9.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
+	pentadra10.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
 	
-	// Rotate object dependent on spin angle and axis vlaues
-	newPentadraTest.rotatePoints(spin, xAxisRotation, yAxisRotation, zAxisRotation);
-	//pentadraTest2.rotatePoints(spin, xAxisRotation, yAxisRotation, zAxisRotation);
-	
-	// Begin drawing the Pentadra
-	 
-	newPentadraTest.drawPentadraPair();
-	//pentadraTest2.drawPentadraPair();
-	
-	// Pop the matrix off the stack, swap the two buffers and flush
-	// it out of the OpenGL pipe
-	glPopMatrix();
 	glutSwapBuffers();
 	glFlush();
 }
@@ -231,16 +232,16 @@ void keyboard(unsigned char key, int xPos, int yPos)
 			VRP[2] = VRP[2] - VPN[2];
 			break;
 		case 78:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
 			break;
 		case 110:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
 			break;
 		case 77:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
 			break;
 		case 109:
-			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
 			break;
 		default:
 			break;
@@ -257,19 +258,19 @@ void processSpecialKeys(int key, int xx, int yy)
 	switch (key)
 	{
 		case GLUT_KEY_LEFT:
-			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/10);
+			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/15);
 			break;
 		case GLUT_KEY_RIGHT:
-			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VPN, VUP[0], VUP[1], VUP[2], PI/15 * -1);
 			break;
 			break;
 		case GLUT_KEY_UP:
-			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10 * -1);
-			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10 * -1);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15 * -1);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15 * -1);
 			break;
 		case GLUT_KEY_DOWN:
-			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10);
-			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/10);
+			rotateAboutArbitraryAxis(VUP, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15);
+			rotateAboutArbitraryAxis(VPN, crossVupVpn[0], crossVupVpn[1], crossVupVpn[2], PI/15);
 			break;
 		default:
 			break;
