@@ -1,7 +1,6 @@
 #include <GL/glut.h>
-#include "PentadraPair.h"
 #include <cmath>
-#include <iostream>
+#include "PentadraPair.h"
 
 // Function Prototypes
 
@@ -28,11 +27,15 @@ void rotationHelperFunc();
 
 // Function which changes which axis is being rotated about when
 // key is pressed
-
 void changeAxisRotation(double, double, double);
 
+// Take in two vectors, compute their cross product, and return the vector of the cross product
 double* computeCrossProduct (double[], double[]);
+
+// Rotate a vector about an arbitray axis
 void rotateAboutArbitraryAxis(double[], GLfloat, GLfloat, GLfloat, double);
+
+// Deal with OpenGL's rendition of UP, DOWN, LEFT, RIGHT cursor keys
 void processSpecialKeys(int, int, int);
 
 // Global Variables
@@ -47,9 +50,12 @@ static GLfloat xAxisRotation = 1.0;
 static GLfloat yAxisRotation = 0.0;
 static GLfloat zAxisRotation = 0.0;
 
+// Major vectors that we deal with in the assignment
 static double VPN[3];
 static double VUP[3];
 static double VRP[3];
+
+// Global object
 static PentadraPair pentadra1(cos(0), sin(0), -10);
 static PentadraPair pentadra2(cos(PI/3), sin(PI/3), -7);
 static PentadraPair pentadra3(cos(2*PI/3), sin(2*PI/3), -4);
@@ -98,6 +104,7 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	
+	// Give the VRP, VPN, and VUP default values
 	VRP[0] = 0;
 	VRP[1] = 0;
 	VRP[2] = 5;
@@ -118,25 +125,21 @@ void init()
 //***************************************************************
 void display()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	/* set the viewing area -- use perspective projection
-	 * an object at the origin that is about 1 or 2 units wide should
-	 * be nicely visible
-	*/
-	//glFrustum(-1.0, 1.0, -1.0, 1.0, 0.5, 15.0);
-	gluPerspective(60.0, (GLfloat) screenWidth/(GLfloat) screenHeight,0.1, 25.0);
-	
+	// Clear the colour buffer and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glCullFace(GL_BACK);
 	
+	// Handle perspective of the projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60.0, (GLfloat) screenWidth/(GLfloat) screenHeight,0.1, 25.0);
+	
+	// Deal with the appropiate 'camera' viewpoint
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	/* Viewing Transformation
-	 * sets the eye to be at (1.5, 1.5, 1.5) looking at the origin etc.
-	*/
 	gluLookAt(VRP[0], VRP[1], VRP[2], VRP[0] + VPN[0], VRP[1] + VPN[1], VRP[2] + VPN[2], VUP[0], VUP[1], VUP[2]);
 	
+	// Draw and rotate each item accordingly
 	pentadra1.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
 	pentadra2.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
 	pentadra3.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
@@ -149,6 +152,7 @@ void display()
 	pentadra10.drawAndRotate(spin, xAxisRotation, yAxisRotation, zAxisRotation);
 	
 	glutSwapBuffers();
+	
 	glFlush();
 }
 
@@ -217,30 +221,37 @@ void keyboard(unsigned char key, int xPos, int yPos)
 		case 122:
 			changeAxisRotation(0.0, 0.0, 1.0);
 			break;
+		// Space bar
 		case 32:
 			VRP[0] = VRP[0] + VPN[0];
 			VRP[1] = VRP[1] + VPN[1];
 			VRP[2] = VRP[2] + VPN[2];
 			break;
+		// 'B' key
 		case 66:
 			VRP[0] = VRP[0] - VPN[0];
 			VRP[1] = VRP[1] - VPN[1];
 			VRP[2] = VRP[2] - VPN[2];
 			break;
+		// 'b' key
 		case 98:
 			VRP[0] = VRP[0] - VPN[0];
 			VRP[1] = VRP[1] - VPN[1];
 			VRP[2] = VRP[2] - VPN[2];
 			break;
+		// 'N' key
 		case 78:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
 			break;
+		// 'n' key
 		case 110:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15);
 			break;
+		// 'M' key
 		case 77:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
 			break;
+		// 'm' key
 		case 109:
 			rotateAboutArbitraryAxis(VUP, VPN[0], VPN[1], VPN[2], PI/15 * -1);
 			break;
@@ -250,12 +261,21 @@ void keyboard(unsigned char key, int xPos, int yPos)
 			
 }
 
+//***************************************************************
+// Function: processSpecialKeys
+// Purpose: Handles all keyboard input of special keys not available
+//			within the standard keyboard function. These are the cursor
+//			keys. If the key is up or down, we want to rotate VPN/VUP
+//			about the cross of VPN and VUP. If the key is left or
+//			right, we want to rotate VPN about VUP
+//***************************************************************
 void processSpecialKeys(int key, int xx, int yy)
 {
 	double crossVupVpn[3];
 	crossVupVpn[0] = computeCrossProduct(VUP, VPN)[0];
 	crossVupVpn[1] = computeCrossProduct(VUP, VPN)[1];
 	crossVupVpn[2] = computeCrossProduct(VUP, VPN)[2];
+	
 	switch (key)
 	{
 		case GLUT_KEY_LEFT:
@@ -351,6 +371,10 @@ void changeAxisRotation(double xAxis, double yAxis, double zAxis)
 	zAxisRotation = zAxis;
 }
 
+//***************************************************************
+// Function: Cross Product Computer
+// Purpose: Takes in two vectors and returns the cross product of them
+//***************************************************************
 double* computeCrossProduct (double vector1[3], double vector2[3])
 {
 	double crossProductVector[3];
@@ -362,6 +386,11 @@ double* computeCrossProduct (double vector1[3], double vector2[3])
 	return crossProductVector;
 }
 
+//***************************************************************
+// Function: Arbitrary Axis Rotator
+// Purpose: Rotates vector A about vector with x, y, z values of
+//			uX, uY, uZ by theta. Provided by the professor
+//***************************************************************
 void rotateAboutArbitraryAxis(double* A, GLfloat uX, GLfloat uY, GLfloat uZ, double theta) 
 {
 	double ct, st, lv0, lv1, lv2;
