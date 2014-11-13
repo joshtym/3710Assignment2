@@ -30,10 +30,10 @@ void PentadraPair::drawPentadraPair()
 	
 	for (int i = 0; i < 10; ++i)
 	{		
-		if (i < 5)
+		/*if (i < 5)
 			glColor3f(colourOne[0], colourOne[1], colourOne[2]);
 		else
-			glColor3f(colourTwo[0], colourTwo[1], colourTwo[2]);
+			glColor3f(colourTwo[0], colourTwo[1], colourTwo[2]);*/
 		
 		if (i == 2 || i == 4 || i == 7 || i == 9)
 			iterateAmount = 3;
@@ -44,6 +44,7 @@ void PentadraPair::drawPentadraPair()
 		glBegin(GL_POLYGON);
 			for (int j = 0; j < iterateAmount; j++)
 			{
+				glColor3f(colourOne[3 * j], colourOne[3 * j + 1], colourOne[3 * j + 2]);
 				if (currentArrayNumber >= 18)
 					glVertex3f(xValues[currentArrayNumber - 18], yValues[currentArrayNumber - 18], (zValues[currentArrayNumber - 18]) * -1);
 				else

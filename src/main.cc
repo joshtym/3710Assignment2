@@ -66,8 +66,6 @@ int main(int argc, char **argv)
 	/* Supplied -- Do not change! */
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(argv[0]);
@@ -97,6 +95,8 @@ void init()
 	// Clear the colour to black and set appropiate ShadeModeling
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	
 	VRP[0] = 0;
 	VRP[1] = 0;
@@ -128,6 +128,7 @@ void display()
 	gluPerspective(60.0, (GLfloat) screenWidth/(GLfloat) screenHeight,0.1, 25.0);
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_BACK);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
