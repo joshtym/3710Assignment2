@@ -62,12 +62,13 @@ void PentadraPair::drawPentadraPair()
 	// Algorithm to iterate through all the points and draw all the points
 	int iterateAmount = 0;
 	int currentArrayNumber = 0;
+	int otherArrayNumber = 1;
 	
 	for (int i = 0; i < 10; ++i)
 	{
 		// Faces 2, 4, 7, and 9 only have 3 points each whilst the others
 		// have 4 (Note that this starts on Face 0)
-		if (i == 2 || i == 4 || i == 7 || i == 9)
+		if (i == 2 || i == 4 || i == 5 || i == 7)
 			iterateAmount = 3;
 		else
 			iterateAmount = 4;
@@ -82,8 +83,12 @@ void PentadraPair::drawPentadraPair()
 				// PentadraPair, we can just re-iterate through the same 18 points and
 				// just multiply the z coordinate by -1.
 				if (currentArrayNumber >= 18)
-					glVertex3f(xValues[currentArrayNumber - 18], yValues[currentArrayNumber - 18], 
-							  (zValues[currentArrayNumber - 18]) * -1);
+				{
+					glVertex3f(xValues[currentArrayNumber - otherArrayNumber], yValues[currentArrayNumber - otherArrayNumber], 
+							  (zValues[currentArrayNumber - otherArrayNumber]) * -1);
+							  
+					otherArrayNumber = otherArrayNumber+2;
+				}
 				else
 					glVertex3f(xValues[currentArrayNumber], yValues[currentArrayNumber], 
 							   zValues[currentArrayNumber]);
